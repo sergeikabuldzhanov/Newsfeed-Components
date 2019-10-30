@@ -138,6 +138,95 @@ const data = [
 <span class='expandButton'></span>
 </div>
  */
+function createArticleForm(){
+  //Create elements
+  const formWrap = document.createElement('div');
+  const button = document.createElement('span');
+  const form = document.createElement('form');
+  const titleLabel = document.createElement('label');
+  const titleInput = document.createElement('input');
+  const firstPLabel = document.createElement('label');
+  const firstPtext = document.createElement('textarea');
+  const secondPLabel = document.createElement('label');
+  const secondPtext = document.createElement('textarea');
+  const thirdPLabel = document.createElement('label');
+  const thirdPtext = document.createElement('textarea');
+  const submitBtn = document. createElement('span');
+  //Set structure
+  form.append(titleLabel, titleInput,firstPLabel, firstPtext, secondPLabel, secondPtext, thirdPLabel, thirdPtext, submitBtn);
+  formWrap.append(button, form);
+
+  //Set classes and attributes
+  button.classList.add('button');
+  submitBtn.classList.add('button');
+
+  form.classList.add('article-form');
+  titleLabel.setAttribute('for', 'title');
+  
+  titleInput.setAttribute('type', 'text');
+  titleInput.setAttribute('name', 'title');
+  
+  firstPLabel.setAttribute('for', 'first-p');
+  firstPtext.setAttribute('name', 'first-p');
+  firstPtext.setAttribute('cols', '30');
+  firstPtext.setAttribute('rows', '10');
+  
+  secondPLabel.setAttribute('for', 'second-p');
+  secondPtext.setAttribute('name', 'second-p');
+  secondPtext.setAttribute('cols', '30');
+  secondPtext.setAttribute('rows', '10');
+  
+  thirdPLabel.setAttribute('for', 'third-p');
+  thirdPtext.setAttribute('name', 'third-p');
+  thirdPtext.setAttribute('cols', '30');
+  thirdPtext.setAttribute('rows', '10');
+  
+  // submitBtn.setAttribute('type', 'submit');
+  //Add content
+  button.textContent = 'ADD ARTICLE';
+  titleLabel.textContent = 'Article Title';
+  firstPLabel.textContent = 'First paragraph';
+  secondPLabel.textContent = 'Second paragraph';
+  thirdPLabel.textContent = 'Third paragraph';
+  submitBtn.textContent = 'SUBMIT ARTICLE';
+  //Add functionality
+  button.addEventListener('click', event=>{
+    form.classList.toggle('toggle-form');
+    button.classList.toggle('hidden');
+    TweenMax.to(form, 1, {y:200, opacity: 1});
+  })
+
+  submitBtn.addEventListener('click', event=>{
+    let today = new Date();
+    let dd = String(today.getDate()).padStart(2, '0');
+    let mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    let yyyy = today.getFullYear();
+
+    today = dd + '/' + mm + '/' + yyyy;
+    console.log(today);
+    let articleData = {
+      title: titleInput.value,
+      date: today,
+      firstParagraph: firstPtext.value,
+      secondParagraph: secondPtext.value,
+      thirdParagraph: thirdPtext.value,
+    }
+    document.querySelector('.articles').append(createArticle(articleData));
+    form.classList.toggle('toggle-form');
+    button.classList.toggle('hidden');
+    titleInput.value = '';
+    firstPtext.value = '';
+    secondPtext.value = '';
+    thirdPtext.value = '';
+    
+  })
+  //Return
+  return formWrap;
+}
+
+document.querySelector('.articles').append(createArticleForm());
+
+
 function createArticle(obj){
   //Create elements
   const article = document.createElement('div');
@@ -158,9 +247,20 @@ function createArticle(obj){
   //Add functionality
   expand.addEventListener('click', event=>{
     article.classList.toggle('article-open');
+    TweenMax.fromTo(article, 0.3, { 
+      scaleY: 0.1, 
+      autoAlpha: 0, 
+    }, {
+      scaleY: 1, 
+      autoAlpha: 1,
+      ease: Linear.easeNone 
+    });
+        
+    
   });
   close.addEventListener('click', event=>{
-    article.style.display = 'none';
+    TweenMax.to(article, 0.3, {x:200, opacity: 0, onComplete:()=>article.style.display = 'none'});
+    // article.style.display = 'none';
   })
   //Add content
   title.textContent = obj.title;
@@ -177,3 +277,4 @@ function createArticle(obj){
 data.map((elem)=>{
   document.querySelector('.articles').append(createArticle(elem));
 })
+
