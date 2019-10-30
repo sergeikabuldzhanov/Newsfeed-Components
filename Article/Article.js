@@ -147,16 +147,21 @@ function createArticle(obj){
   const secondParagraph = document.createElement('p');
   const thirdParagraph = document.createElement('p');
   const expand = document.createElement('span');
+  const close = document.createElement('span');
   //setup structure
-  article.append(title, date, firstParagraph, secondParagraph, thirdParagraph, expand);
+  article.append(title, date, firstParagraph, secondParagraph, thirdParagraph, expand, close);
   //Add classes
   article.classList.add('article');
   date.classList.add('date');
   expand.classList.add('expandButton');
+  close.classList.add('close');
   //Add functionality
   expand.addEventListener('click', event=>{
     article.classList.toggle('article-open');
   });
+  close.addEventListener('click', event=>{
+    article.style.display = 'none';
+  })
   //Add content
   title.textContent = obj.title;
   date.textContent = obj.date;
@@ -164,6 +169,7 @@ function createArticle(obj){
   secondParagraph.textContent = obj.secondParagraph;
   thirdParagraph.textContent = obj.thirdParagraph;
   expand.textContent = 'Expand';
+  close.textContent = '✖';
   
   return article;
 }
