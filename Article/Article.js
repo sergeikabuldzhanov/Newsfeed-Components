@@ -85,6 +85,22 @@ const data = [
     thirdParagraph: `Hodor hodor - hodor... Hodor hodor hodor hodor. Hodor. Hodor! Hodor hodor, hodor hodor hodor hodor hodor; hodor hodor? Hodor!
           Hodor hodor, HODOR hodor, hodor hodor?! Hodor! Hodor hodor, HODOR hodor, hodor hodor, hodor, hodor hodor. Hodor, hodor.
           Hodor. Hodor, hodor, hodor. Hodor hodor... Hodor hodor hodor?! Hodor, hodor... Hodor hodor HODOR hodor, hodor hodor. Hodor.`
+  },
+  {
+    title: 'WOW IS THIS AN ARTICLE?',
+    date: 'Jan 1st, 2019',
+    firstParagraph: `Hodor hodor HODOR! Hodor hodor - hodor, hodor. Hodor hodor... Hodor hodor hodor; hodor hodor. Hodor hodor hodor, hodor, hodor
+          hodor. Hodor, hodor. Hodor. Hodor, hodor - hodor... Hodor hodor hodor; hodor HODOR hodor, hodor hodor?! Hodor hodor, hodor.
+          Hodor hodor hodor hodor hodor! Hodor hodor - HODOR hodor, hodor hodor hodor hodor hodor; hodor hodor? `,
+
+    secondParagraph: `Hodor, hodor. Hodor. Hodor, hodor, hodor. Hodor hodor, hodor. Hodor hodor, hodor, hodor hodor. Hodor! Hodor hodor, hodor;
+          hodor hodor hodor? Hodor, hodor. Hodor. Hodor, hodor - HODOR hodor, hodor hodor hodor! Hodor, hodor. Hodor. Hodor, HODOR
+          hodor, hodor hodor, hodor, hodor hodor. Hodor hodor - hodor - hodor... Hodor hodor hodor hodor hodor hodor hodor?! Hodor
+          hodor - hodor hodor hodor. Hodor. Hodor hodor... Hodor hodor hodor hodor hodor? `,
+
+    thirdParagraph: `Hodor hodor - hodor... Hodor hodor hodor hodor. Hodor. Hodor! Hodor hodor, hodor hodor hodor hodor hodor; hodor hodor? Hodor!
+          Hodor hodor, HODOR hodor, hodor hodor?! Hodor! Hodor hodor, HODOR hodor, hodor hodor, hodor, hodor hodor. Hodor, hodor.
+          Hodor. Hodor, hodor, hodor. Hodor hodor... Hodor hodor hodor?! Hodor, hodor... Hodor hodor HODOR hodor, hodor hodor. Hodor.`
   }
 ];
 
@@ -112,3 +128,153 @@ const data = [
   Step 5: Add a new article to the array. Make sure it is in the same format as the others. Refresh the page to see the new article.
 
 */
+/* 
+<div class="article">
+<h2>{title of the article}</h2>
+<p class="date">{date of the article}</p>
+
+{three separate paragraph elements}
+
+<span class='expandButton'></span>
+</div>
+ */
+function createArticleForm(){
+  //Create elements
+  const formWrap = document.createElement('div');
+  const button = document.createElement('span');
+  const form = document.createElement('form');
+  const titleLabel = document.createElement('label');
+  const titleInput = document.createElement('input');
+  const firstPLabel = document.createElement('label');
+  const firstPtext = document.createElement('textarea');
+  const secondPLabel = document.createElement('label');
+  const secondPtext = document.createElement('textarea');
+  const thirdPLabel = document.createElement('label');
+  const thirdPtext = document.createElement('textarea');
+  const submitBtn = document. createElement('span');
+  //Set structure
+  form.append(titleLabel, titleInput,firstPLabel, firstPtext, secondPLabel, secondPtext, thirdPLabel, thirdPtext, submitBtn);
+  formWrap.append(button, form);
+
+  //Set classes and attributes
+  button.classList.add('button');
+  submitBtn.classList.add('button');
+
+  form.classList.add('article-form');
+  titleLabel.setAttribute('for', 'title');
+  
+  titleInput.setAttribute('type', 'text');
+  titleInput.setAttribute('name', 'title');
+  
+  firstPLabel.setAttribute('for', 'first-p');
+  firstPtext.setAttribute('name', 'first-p');
+  firstPtext.setAttribute('cols', '30');
+  firstPtext.setAttribute('rows', '10');
+  
+  secondPLabel.setAttribute('for', 'second-p');
+  secondPtext.setAttribute('name', 'second-p');
+  secondPtext.setAttribute('cols', '30');
+  secondPtext.setAttribute('rows', '10');
+  
+  thirdPLabel.setAttribute('for', 'third-p');
+  thirdPtext.setAttribute('name', 'third-p');
+  thirdPtext.setAttribute('cols', '30');
+  thirdPtext.setAttribute('rows', '10');
+  
+  // submitBtn.setAttribute('type', 'submit');
+  //Add content
+  button.textContent = 'ADD ARTICLE';
+  titleLabel.textContent = 'Article Title';
+  firstPLabel.textContent = 'First paragraph';
+  secondPLabel.textContent = 'Second paragraph';
+  thirdPLabel.textContent = 'Third paragraph';
+  submitBtn.textContent = 'SUBMIT ARTICLE';
+  //Add functionality
+  button.addEventListener('click', event=>{
+    form.classList.toggle('toggle-form');
+    button.classList.toggle('hidden');
+    TweenMax.to(form, 1, {y:200, opacity: 1});
+  })
+
+  submitBtn.addEventListener('click', event=>{
+    let today = new Date();
+    let dd = String(today.getDate()).padStart(2, '0');
+    let mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    let yyyy = today.getFullYear();
+
+    today = dd + '/' + mm + '/' + yyyy;
+    console.log(today);
+    let articleData = {
+      title: titleInput.value,
+      date: today,
+      firstParagraph: firstPtext.value,
+      secondParagraph: secondPtext.value,
+      thirdParagraph: thirdPtext.value,
+    }
+    document.querySelector('.articles').append(createArticle(articleData));
+    form.classList.toggle('toggle-form');
+    button.classList.toggle('hidden');
+    titleInput.value = '';
+    firstPtext.value = '';
+    secondPtext.value = '';
+    thirdPtext.value = '';
+    
+  })
+  //Return
+  return formWrap;
+}
+
+document.querySelector('.articles').append(createArticleForm());
+
+
+function createArticle(obj){
+  //Create elements
+  const article = document.createElement('div');
+  const title = document.createElement('h2');
+  const date = document.createElement('p');
+  const firstParagraph = document.createElement('p');
+  const secondParagraph = document.createElement('p');
+  const thirdParagraph = document.createElement('p');
+  const expand = document.createElement('span');
+  const close = document.createElement('span');
+  //setup structure
+  article.append(title, date, firstParagraph, secondParagraph, thirdParagraph, expand, close);
+  //Add classes
+  article.classList.add('article');
+  date.classList.add('date');
+  expand.classList.add('expandButton');
+  close.classList.add('close');
+  //Add functionality
+  expand.addEventListener('click', event=>{
+    article.classList.toggle('article-open');
+    TweenMax.fromTo(article, 0.3, { 
+      scaleY: 0.1, 
+      autoAlpha: 0, 
+    }, {
+      scaleY: 1, 
+      autoAlpha: 1,
+      ease: Linear.easeNone 
+    });
+        
+    
+  });
+  close.addEventListener('click', event=>{
+    TweenMax.to(article, 0.3, {x:200, opacity: 0, onComplete:()=>article.style.display = 'none'});
+    // article.style.display = 'none';
+  })
+  //Add content
+  title.textContent = obj.title;
+  date.textContent = obj.date;
+  firstParagraph.textContent = obj.firstParagraph;
+  secondParagraph.textContent = obj.secondParagraph;
+  thirdParagraph.textContent = obj.thirdParagraph;
+  expand.textContent = 'Expand';
+  close.textContent = '✖';
+  
+  return article;
+}
+
+data.map((elem)=>{
+  document.querySelector('.articles').append(createArticle(elem));
+})
+
